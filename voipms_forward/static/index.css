@@ -1,0 +1,29 @@
+body {
+    font-family: sans-serif;
+    font-size: 16pt;
+    max-width: 40em;
+    margin: auto;
+    padding-top: 1em;
+}
+
+div.alert {
+    padding: 1em;
+    background-color: black;
+    color: white;
+}
+
+button {
+    width: 100%;
+    font-size: 16pt;
+    padding: 1em;
+}
+
+div.forward-button {
+    margin-bottom: 1em;
+}
+
+section#current {
+    border: 1px solid black;
+    margin: 1em 0;
+    padding: 0.5em 1em;
+}

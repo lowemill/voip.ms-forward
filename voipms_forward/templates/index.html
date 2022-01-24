@@ -1,0 +1,48 @@
+{% macro render_forward(forward, description) %}
+<div class="forward-button">
+    <form action="{{ url_for('do_forward') }}" method="POST">
+        <input type="hidden" name="csrf" value="{{ session.csrf }}" />
+        <input type="hidden" name="forward" value="{{ forward }}" />
+        <button type="submit">{{ description }}</button>
+    </form>
+</div>
+{% endmacro %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}" />
+
+        <title>Call Forwarding Manager</title>
+    </head>
+    <body>
+        {% with msgs = get_flashed_messages() %}
+        {% if msgs %}
+        <section id="alerts">
+            {% for msg in msgs %}
+            <div class="alert">
+                {{ msg }}
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+        {% endwith %}
+
+        <section id="current">
+            <p>Current phone routing: <strong>{{ current }}</strong></p>
+        </section>
+
+        <section id="buttons">
+            {% for forward in forwards %}
+            {% if current != forward.description %}
+            {{ render_forward(forward.forwarding, forward.description) }}
+            {% endif %}
+            {% endfor %}
+            {% if current != "Not forwarded" %}
+            {{ render_forward("default", "Disable forwarding") }}
+            {% endif %}
+        </section>
+    </body>
+</html>
