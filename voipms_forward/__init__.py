@@ -21,6 +21,18 @@ def inject_config():
 
 
 @app.before_request
+def check_login():
+    if (request.authorization and
+            request.authorization.password == os.getenv("LOGIN_PASSWORD")):
+        return
+
+    if request.cookies.get("auth") == os.getenv("LOGIN_PASSWORD"):
+        return
+
+    return "", 401, {"WWW-Authenticate": "Basic realm=Please log in"}
+
+
+@app.before_request
 def inject_csrf_prevention_token():
     if "csrf" not in session:
         session["csrf"] = secrets.token_hex(16)
