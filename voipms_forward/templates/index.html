@@ -1,6 +1,6 @@
 {% macro render_forward(forward, description) %}
 <div class="forward-button">
-    <form action="{{ url_for('do_forward') }}" method="POST">
+    <form action="{{ url_for('do_forward') }}" class="changeRoutingForm" method="POST">
         <input type="hidden" name="csrf" value="{{ session.csrf }}" />
         <input type="hidden" name="forward" value="{{ forward }}" />
         <button type="submit">{{ description }}</button>
@@ -45,16 +45,44 @@
             {% endif %}
         </section>
 
+        <hr />
+
+        <section id="newForward">
+            <details>
+                <summary>Add new forwarding option</summary>
+                <form method="POST" action="{{ url_for('do_add') }}">
+                    <input type="hidden" name="csrf" value="{{ session.csrf }}" />
+                    <label>
+                        Destination number (10 digits)
+                        <input type="text" name="destination" required pattern="^[0-9]{10}$" placeholder="2568240707" />
+                    </label>
+                    <label>
+                        Forward description (as displayed on button)
+                        <input type="text" name="description" required placeholder="Forward to someone" />
+                    </label>
+                    <button type="submit">Add new forwarding option</button>
+                </form>
+            </details>
+        </section>
+
         <script type="text/javascript">
-            let showProgress = function() {
-                document.getElementsByTagName('strong')[0].innerHTML = "...";
+            let disableButtons = function() {
                 for ( let el of document.getElementsByTagName('button') ) {
                     el.disabled = true;
                 }
             };
 
-            for ( let form of document.getElementsByTagName('form') ) {
+            let showProgress = function() {
+                document.getElementsByTagName('strong')[0].innerHTML = "...";
+                disableButtons();
+            };
+
+            for ( let form of document.querySelectorAll('form.changeRoutingForm') ) {
                 form.addEventListener('submit', showProgress);
+            }
+
+            for ( let form of document.querySelectorAll('form:not(.changeRoutingForm)') ) {
+                form.addEventListener('submit', disableButtons);
             }
         </script>
     </body>

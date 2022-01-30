@@ -6,6 +6,17 @@ body {
     padding-top: 1em;
 }
 
+input {
+    font-size: 16pt;
+}
+
+label {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
 div.alert {
     padding: 1em;
     background-color: black;
@@ -18,6 +29,12 @@ button {
     padding: 1em;
 }
 
+button.smallButton {
+    width: 100%;
+    font-size: 16pt;
+    padding: 0.5em 1em;
+}
+
 div.forward-button {
     margin-bottom: 1em;
 }
@@ -26,4 +43,24 @@ section#current {
     border: 1px solid black;
     margin: 1em 0;
     padding: 0.5em 1em;
+}
+
+summary {
+    font-size: 130%;
+    font-weight: bold;
+    margin: 1em 0;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+input {
+    border: 2px solid gray;
+}
+
+input:not(:placeholder-shown):invalid {
+    border: 2px solid red;
+}
+
+input:valid {
+    border: 2px solid green;
 }

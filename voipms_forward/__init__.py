@@ -94,6 +94,25 @@ def do_forward():
     return redirect(url_for("index"))
 
 
+@app.route("/add/", methods=["POST"])
+def do_add():
+    if request.form["csrf"] != session["csrf"]:
+        flash("Sorry, that didn't work. Please try again. (CSRF check failed)")
+        return redirect(url_for("index"))
+
+    result = g.api.call("setForwarding",
+                        phone_number=request.form["destination"],
+                        description=request.form["description"])
+
+    if result["status"] == "success":
+        flash("New forwarding option added.")
+
+    else:
+        flash(f"Sorry, that didn't work. (VoIP.MS said {result['status']})")
+
+    return redirect(url_for("index"))
+
+
 def get_app():
     for key in ["VOIPMS_API_USERNAME", "VOIPMS_API_PASSWORD",
                 "VOIPMS_FORWARD_DID", "VOIPMS_FORWARD_DEFAULT_ROUTING"]:
