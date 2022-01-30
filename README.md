@@ -45,6 +45,7 @@ On `dest`:
 
 * `docker image load -i image.tar`
 * `docker container stop lowemill-voipms-forward`
+* `docker container rm lowemill-voipms-forward`
 
 To restart the container, run the following command, substituting for your
 environment as needed:
