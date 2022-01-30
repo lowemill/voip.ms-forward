@@ -44,5 +44,18 @@
             {{ render_forward("default", "Disable forwarding") }}
             {% endif %}
         </section>
+
+        <script type="text/javascript">
+            let showProgress = function() {
+                document.getElementsByTagName('strong')[0].innerHTML = "...";
+                for ( let el of document.getElementsByTagName('button') ) {
+                    el.disabled = true;
+                }
+            };
+
+            for ( let form of document.getElementsByTagName('form') ) {
+                form.addEventListener('submit', showProgress);
+            }
+        </script>
     </body>
 </html>
