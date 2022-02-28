@@ -1,7 +1,7 @@
 body {
     font-family: sans-serif;
     font-size: 16pt;
-    max-width: 40em;
+    max-width: 42em;
     margin: auto;
     padding-top: 1em;
 }
@@ -37,6 +37,11 @@ button.smallButton {
 
 div.forward-button {
     margin-bottom: 1em;
+}
+
+div.main {
+    margin-left: 1em;
+    margin-right: 1em;
 }
 
 section#current {

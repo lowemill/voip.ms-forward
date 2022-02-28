@@ -18,52 +18,54 @@
         <title>Call Forwarding Manager</title>
     </head>
     <body>
-        {% with msgs = get_flashed_messages() %}
-        {% if msgs %}
-        <section id="alerts">
-            {% for msg in msgs %}
-            <div class="alert">
-                {{ msg }}
-            </div>
-            {% endfor %}
-        </section>
-        {% endif %}
-        {% endwith %}
-
-        <section id="current">
-            <p>Current phone routing: <strong>{{ current }}</strong></p>
-        </section>
-
-        <section id="buttons">
-            {% for forward in forwards %}
-            {% if current != forward.description %}
-            {{ render_forward(forward.forwarding, forward.description) }}
+        <div class="main">
+            {% with msgs = get_flashed_messages() %}
+            {% if msgs %}
+            <section id="alerts">
+                {% for msg in msgs %}
+                <div class="alert">
+                    {{ msg }}
+                </div>
+                {% endfor %}
+            </section>
             {% endif %}
-            {% endfor %}
-            {% if current != "Not forwarded" %}
-            {{ render_forward("default", "Disable forwarding") }}
-            {% endif %}
-        </section>
+            {% endwith %}
 
-        <hr />
+            <section id="current">
+                <p>Current phone routing: <strong>{{ current }}</strong></p>
+            </section>
 
-        <section id="newForward">
-            <details>
-                <summary>Add new forwarding option</summary>
-                <form method="POST" action="{{ url_for('do_add') }}">
-                    <input type="hidden" name="csrf" value="{{ session.csrf }}" />
-                    <label>
-                        Destination number (10 digits)
-                        <input type="text" name="destination" required pattern="^[0-9]{10}$" placeholder="2568240707" />
-                    </label>
-                    <label>
-                        Forward description (as displayed on button)
-                        <input type="text" name="description" required placeholder="Forward to someone" />
-                    </label>
-                    <button type="submit">Add new forwarding option</button>
-                </form>
-            </details>
-        </section>
+            <section id="buttons">
+                {% for forward in forwards %}
+                {% if current != forward.description %}
+                {{ render_forward(forward.forwarding, forward.description) }}
+                {% endif %}
+                {% endfor %}
+                {% if current != "Not forwarded" %}
+                {{ render_forward("default", "Disable forwarding") }}
+                {% endif %}
+            </section>
+
+            <hr />
+
+            <section id="newForward">
+                <details>
+                    <summary>Add new forwarding option</summary>
+                    <form method="POST" action="{{ url_for('do_add') }}">
+                        <input type="hidden" name="csrf" value="{{ session.csrf }}" />
+                        <label>
+                            Destination number (10 digits)
+                            <input type="text" name="destination" required pattern="^[0-9]{10}$" placeholder="2568240707" />
+                        </label>
+                        <label>
+                            Forward description (as displayed on button)
+                            <input type="text" name="description" required placeholder="Forward to someone" />
+                        </label>
+                        <button type="submit">Add new forwarding option</button>
+                    </form>
+                </details>
+            </section>
+        </div>
 
         <script type="text/javascript">
             let disableButtons = function() {
