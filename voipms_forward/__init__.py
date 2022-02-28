@@ -44,8 +44,7 @@ def cleanup_api_session(resp):
     return resp
 
 
-@app.route("/")
-def index():
+def get_voipms_info():
     forwards = g.api.call("getForwardings")["forwardings"]
 
     did_info = g.api.call("getDIDsInfo", did=g.did)["dids"][0]
@@ -58,6 +57,13 @@ def index():
     else:
         if current_routing == g.default_routing:
             current_routing_description = "Not forwarded"
+
+    return forwards, current_routing_description
+
+
+@app.route("/")
+def index():
+    forwards, current_routing_description = get_voipms_info()
 
     return render_template(
         "index.html", forwards=forwards, current=current_routing_description,
@@ -82,7 +88,6 @@ def do_forward():
                           routing=g.default_routing)
 
     else:
-        print(request.form["forward"], forward_ids)
         flash("Sorry, that didn't work. (Invalid forwarding requested)")
         return redirect(url_for("index"))
 
@@ -111,6 +116,40 @@ def do_add():
         flash(f"Sorry, that didn't work. (VoIP.MS said {result['status']})")
 
     return redirect(url_for("index"))
+
+
+@app.route("/cisco/")
+def do_cisco():
+    if "Cisco" not in request.headers["User-Agent"]:
+        return "You're not a phone!", 400, {}
+
+    result = None
+    if "set" in request.args:
+        result = g.api.call("setDIDRouting", did=g.did,
+                            routing=f"fwd:{request.args['set']}")
+
+    elif "unset" in request.args:
+        result = g.api.call("setDIDRouting", did=g.did,
+                            routing=g.default_routing)
+
+    forwards, current_routing_description = get_voipms_info()
+
+    if result is not None:
+        if result["status"] != "success":
+            msg = "Forwarding failed :("
+        else:
+            return render_template(
+                "cisco-done.xml",
+                msg=f"The new destination is: {current_routing_description}"
+            )
+
+    else:
+        msg = f"Current: {current_routing_description}"
+
+    return render_template(
+        "cisco.xml", msg=msg, forwards=forwards,
+        current=current_routing_description,
+    )
 
 
 def get_app():

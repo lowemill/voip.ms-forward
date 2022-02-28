@@ -1,0 +1,25 @@
+<CiscoIPPhoneMenu>
+    <Title>Choose a forwarding destination</Title>
+    <Prompt>{{ msg }}</Prompt>
+
+    {% for forward in forwards %}
+    {% if current != forward.description %}
+    <MenuItem>
+        <Name>{{ forward.description }}</Name>
+        <URL>https://{{ request.host }}/cisco/?set={{ forward.forwarding }}</URL>
+    </MenuItem>
+    {% endif %}
+    {% endfor %}
+    {% if current != "Not forwarded" %}
+    <MenuItem>
+        <Name>Disable forwarding</Name>
+        <URL>https://{{ request.host }}/cisco/?unset</URL>
+    </MenuItem>
+    {% endif %}
+
+    <SoftKeyItem>
+        <Name>Exit</Name>
+        <URL>Init:Services</URL>
+        <Position>3</Position>
+    </SoftKeyItem>
+</CiscoIPPhoneMenu>

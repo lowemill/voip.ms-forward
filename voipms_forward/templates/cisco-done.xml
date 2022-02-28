@@ -1,0 +1,10 @@
+<CiscoIPPhoneText>
+    <Title>Forwarding set</Title>
+    <Text>{{ msg }}</Text>
+
+    <SoftKeyItem>
+        <Name>Exit</Name>
+        <URL>Init:Services</URL>
+        <Position>3</Position>
+    </SoftKeyItem>
+</CiscoIPPhoneText>
